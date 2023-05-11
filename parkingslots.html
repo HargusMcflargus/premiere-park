@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/loading-indicator.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Premiere Park Admin</title>
+</head>
+
+<body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#">Premiere Park</a>
+        </div>
+    </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-start sidebar-nav bg-dark" tabindex="-1" id="sidebar">
+        <div class="offcanvas-body p-0 navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <a href="dashboard.html" class="nav-link px-3">
+                        <span class="me-2"><i class="fa-solid fa-house" style="color: #c7c7c7;"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="my-4">
+                    <hr class="dropdown-divider bg-light" />
+                </li>
+                <li>
+                    <a href="parkingslots.html" class="nav-link px-3 active">
+                        <span class="me-2">
+                            <i class="fa-solid fa-square-parking" style="color: white;"></i>
+                        </span>
+                        <span>Parking Slots</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parkinglotvenue.html" class="nav-link px-3">
+                        <span class="me-2">
+                            <i class="fa-solid fa-location-dot" style="color: #c7c7c7;"></i></span>
+                        <span>Parking Lot Venue</span>
+                    </a>
+                </li>
+                <li class="my-4">
+                    <hr class="dropdown-divider bg-light" />
+                </li>
+                <li>
+                    <a id="logoutBtn" href="#" class="nav-link px-3">
+                        <span class="me-2">
+                            <span><i class="fa-solid fa-power-off fa-sm" style="color: #c7c7c7"></i>
+                                Logout</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Parking Slots</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="addButton" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#editEntryModal">
+                                <i class="fa-solid fa-plus fa-lg" style="color: #ffffff;"></i>
+                                Add Slot
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="parkingslotsTable" class="table table-striped data-table"
+                                    style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5%">#</th>
+                                            <th style="width: 0%">Slot ID</th>
+                                            <th style="width: 20%">
+                                                Parking Lot Owner
+                                            </th>
+                                            <th style="width: 20%;">
+                                                Venue
+                                            </th>
+                                            <th style="width: 10%">Slot</th>
+                                            <th style="width: 20%">
+                                                Status
+                                            </th>
+                                            <th class="text-center" style="width: 20%;">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- + -->
+                    <div class="modal fade" id="editEntryModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                        Add Record
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="submitData">
+                                        <div class="row justify-content-center align-items-center mb-3">
+                                            <div class="col">
+                                                <label for="" class="form-label">
+                                                    Slot Address
+                                                </label>
+                                                <select name="slotAddress" id="slotAddress"
+                                                    class="form-select"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center align-items-center mb-3">
+                                            <div class="col">
+                                                <label for="title1" class="form-label">Slot ID</label>
+                                                <input type="number" class="form-control" id="slotC" maxlength="5"
+                                                    required />
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="" class="form-label">Slot Type</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input form-check-inline" type="radio"
+                                                        name="slotType" id="slotType_2" value="2">
+                                                    <label class="form-check-label" for="">
+                                                        2 Wheels
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input form-check-inline" type="radio"
+                                                        name="slotType" id="slotType_4" value="4" checked>
+                                                    <label class="form-check-label" for="">
+                                                        4 Wheels
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <br />
+                                                <label for="type1" class="form-label">Status :
+                                                </label>
+                                                <br />
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="type" id="type1"
+                                                        value="vacant" checked />
+                                                    <label class="form-check-label" for="type1">
+                                                        Vacant
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="type" id="type2"
+                                                        value="occupied" />
+                                                    <label class="form-check-label" for="type2">
+                                                        Occupied
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center align-items-center mb-3">
+                                                <div class="col">
+                                                    <div id="googleMap" style="width:auto; height:400px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" id="aid" />
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" id="updateData">
+                                                Create
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- e -->
+                    <div class="modal fade" id="updateSlotModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                        Update Record
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="changeData">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <hr style="
+                                                            height: 15px;
+                                                            background: transparent;
+                                                            color: transparent;
+                                                            margin: 0;
+                                                            border-style: none;
+                                                        " />
+                                                <label for="title1" class="form-label">Establishment:</label>
+                                                <select class="form-control" name="slotownerE" id="slotownerE">
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <hr style="
+                                                            height: 15px;
+                                                            background: transparent;
+                                                            color: transparent;
+                                                            margin: 0;
+                                                            border-style: none;
+                                                        " />
+                                                <label for="title1" class="form-label">Slot</label>
+                                                <input name="slotnumberE" type="text" class="form-control" id="slotnumberE"
+                                                    maxlength="5" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <hr style="
+                                                            height: 15px;
+                                                            background: transparent;
+                                                            color: transparent;
+                                                            margin: 0;
+                                                            border-style: none;
+                                                        " />
+                                                <label for="type1" class="form-label">Status :
+                                                </label>
+                                                <br />
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="statusE"
+                                                        id="type1" value="vacant" checked />
+                                                    <label class="form-check-label" for="type1">
+                                                        Vacant
+                                                    </label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="statusE"
+                                                        id="type2" value="occupied" />
+                                                    <label class="form-check-label" for="type2">
+                                                        Occupied
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input name="eid" type="hidden" id="eid" />
+
+                                        <hr style="
+                                                    height: 15px;
+                                                    background: transparent;
+                                                    color: transparent;
+                                                    margin: 0;
+                                                    border-style: none;
+                                                " />
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" id="updateData">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/geofire.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/geofire@6.0.0/dist/geofire/geofire.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/parkinglot.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVUI3xV4roOoQWbYeBz8e1Hwp7wT4m6sQ&callback=initMap"></script>
+</body>
+
+</html>

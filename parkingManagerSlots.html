@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/loading-indicator.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .switch {
+            --circle-dim: 1.4em;
+            font-size: 17px;
+            position: relative;
+            display: inline-block;
+            width: 3.5em;
+            height: 2em;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f5aeae;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .slider-card {
+            position: absolute;
+            content: "";
+            height: var(--circle-dim);
+            width: var(--circle-dim);
+            border-radius: 20px;
+            left: 0.3em;
+            bottom: 0.3em;
+            transition: .4s;
+            pointer-events: none;
+        }
+
+        .slider-card-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            perspective: 1000px;
+            border-radius: 50%;
+            transition: .4s transform;
+        }
+
+        .slider-card-front {
+            background-color: #DC3535;
+        }
+
+        .slider-card-back {
+            background-color: #379237;
+            transform: rotateY(180deg);
+        }
+
+        input:checked~.slider-card .slider-card-back {
+            transform: rotateY(0);
+        }
+
+        input:checked~.slider-card .slider-card-front {
+            transform: rotateY(-180deg);
+        }
+
+        input:checked~.slider-card {
+            transform: translateX(1.5em);
+        }
+
+        input:checked~.slider {
+            background-color: #9ed99c;
+        }
+    </style>
+
+
+    <title>Premiere Park Park Manager</title>
+</head>
+
+<body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#">Premiere Park</a>
+        </div>
+    </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-start sidebar-nav bg-dark" tabindex="-1" id="sidebar">
+        <div class="offcanvas-body p-0 navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <a href="parkingManageDashboard.html" class="nav-link px-3">
+                        <span class="me-2"><i class="fa-solid fa-house" style="color: #c7c7c7;"></i></span>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parkingManagerSlots.html" class="nav-link active px-3">
+                        <span class="me-2"><i class="fa-solid fa-square-parking" style="color: #c7c7c7;"></i></span>
+                        <span>Parking Slots</span>
+                    </a>
+                </li>
+                </li>
+                <li class="my-4">
+                    <hr class="dropdown-divider bg-light" />
+                </li>
+                <li>
+                    <a id="logoutBtn" href="#" class="nav-link px-3">
+                        <span class="me-2">
+                            <span><i class="fa-solid fa-power-off fa-sm" style="color: #c7c7c7"></i>
+                                Logout</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+        <div class="container-fluid py-auto" id="venueContainer">
+            <div class="row justify-content-center align-items-center ">
+                <div class="col text-center">
+                    <h1>Venues</h1>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"
+                                style="color: #000000;"></i></span>
+                        <input type="text" name="searchVenues" id="searchVenues" class="form-control fw-4">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center w-100">
+                <div class="col w-100">
+                    <div class="list-group w-100 p-0 m-0" id="venuesList">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-none" id="slotContainer">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-1">
+                    <button class="border border-0 bg-transparent" id="backtoVenue">
+                        <i class="fa-solid fa-caret-left fa-2xl" style="color: #000000;"></i>
+                        Back
+                    </button>
+                </div>
+                <div class="col">Parking Slots</div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"
+                                style="color: #000000;"></i></span>
+                        <input type="text" name="searchSlots" id="searchSlots" class="form-control fw-4">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Slot Number</th>
+                                <th scope="col">Occupant</th>
+                                <th scope="col">Slot Type</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+
+
+        $(document).ready(() => {
+            const showVenues = async () => {
+                $("#venuesList").empty()
+                db
+                    .collection("venues")
+                    .get()
+                    .then((documentsRef) => {
+                        if (!documentsRef.empty) {
+                            documentsRef.forEach(async documentRef => {
+                                const documentData = await documentRef.data()
+                                $("#venuesList").append(
+                                    $("<button>")
+                                        .addClass("list-group-item border border-1 rounded rounded-5 shadow py-2 list-group-item-action container")
+                                        .append(
+                                            $("<div>")
+                                                .addClass("row justify-content-center align-items-center")
+                                                .append(
+                                                    $("<div>")
+                                                        .addClass("col-3")
+                                                        .text(documentData.name),
+                                                    $("<div>")
+                                                        .addClass("col")
+                                                        .text(documentData.address),
+                                                    $("<div>")
+                                                        .addClass("col text-end")
+                                                        .append(
+                                                            $("<i>")
+                                                                .addClass("fa-solid fa-caret-right fa-2xl text-black")
+                                                        ),
+                                                )
+                                        )
+                                        .val(documentRef.id)
+                                        .click( (event) => {
+                                            $("#slotContainer, #venueContainer").toggleClass("d-none")
+                                            $("#slotContainer tbody").empty()
+                                            db
+                                                .collection("parkingslots")
+                                                .where("venueID", "==", $(event.currentTarget).val())
+                                                .get()
+                                                .then(async documentsRef => {
+                                                    documentsRef.forEach(async documentRef => {
+                                                        const parkingSlotDetail = await documentRef.data()
+                                                        
+                                                        let status = isAvailable(parkingSlotDetail.reservationList, new Date(), new Date()) ? $("<i>").addClass("fa-solid fa-check fa-2xl").css({ color: "#48ff05" }) : $("<i>").addClass("fa-solid fa-xmark fa-2xl").css({ color: "#db0606" })
+
+                                                        $("#slotContainer tbody").append(
+                                                            $("<tr>")
+                                                                .append(
+                                                                    $("<td>")
+                                                                        .text(parkingSlotDetail.slotnumber),
+                                                                    $("<td>")
+                                                                        .text(parkingSlotDetail.occupant == "" ? "Empty" : await userDisplayName(parkingSlotDetail.occupant)),
+                                                                    $("<td>")
+                                                                        .text(parkingSlotDetail.slotType == "4" ? "Car only" : "Bicycle Only"),
+                                                                    $("<td>")
+                                                                        .append(
+                                                                            $(status)
+                                                                        ),
+                                                                )
+                                                        )
+
+                                                    })
+                                                })
+                                        })
+
+                                )
+                            });
+                        }
+                    })
+            }
+
+            const userDisplayName = async (id) => {
+                return await db.collection("users").doc(id).get().then( async response => {
+                    const finalData = await response.data()
+                    return await finalData.firstname + " " + finalData.lastname
+                })
+            }
+
+            // Check if Available RN or not based on reservation Dates
+            const isAvailable = ( reservationList, to, from ) => {
+                let status = true
+                if( reservationList.length < 1 )
+                    return status
+                reservationList.forEach( ( element ) => {
+                    if (!status) return 
+                    db
+                        .collection("reservations")
+                        .doc(element)
+                        .get()
+                        .then( async (document) => {
+                            if( document.exists ){
+                                const documentData = await document.data()
+                                if( documentData.status == "Pending") return
+                                if( to == null ){
+                                    if( document.from.seconds * 1000 <= new Date().getTime() < document.to.seconds * 1000 ){
+                                        status = false
+                                        return
+                                    }
+                                }
+                                else{
+                                    if( document.from.seconds * 1000 <= to.getTime() < document.to.seconds * 1000 || document.from.seconds * 1000 <= from.getTime() < document.to.seconds * 1000 ){
+                                        status = false
+                                        return
+                                    }
+                                }
+                            }
+                        })
+
+                })
+                return status
+            }
+
+
+            $("#logoutBtn").click( async () => {
+                try{
+                    await auth.signOut()
+                        .then( (exitResponse) => {
+                            sessionStorage.removeItem("uid")
+                            window.location.replace("index.html")
+                        })
+                }
+                catch{
+
+                }
+            })
+            showVenues()
+            $("#backtoVenue").click( () => {
+                $("#venueContainer, #slotContainer").toggleClass("d-none")
+                showVenues()
+            })
+            
+            $("#searchVenues").on("input", function() {
+                var value = $("#searchVenues").val().toLowerCase();
+                $("#venueContainer button.list-group-item").filter(function() {
+                    $(this).toggle(
+                        $(this).html().toLowerCase().indexOf(value) > -1
+                    )
+                });
+            });
+            $("#searchSlots").on("input", function() {
+                var value = $("#searchSlots").val().toLowerCase();
+                $("#slotContainer tbody tr").filter(function() {
+                    $(this).toggle(
+                        $(this).html().toLowerCase().indexOf(value) > -1
+                    )
+                });
+            });
+        })
+
+    </script>
+</body>
+
+</html>

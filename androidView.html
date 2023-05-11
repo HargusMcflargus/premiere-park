@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="manifest" href="/manifest.webmanifest">
+    <title>Welcome to Premiere Park</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+</head>
+
+<body
+    style="background-blend-mode: darken; height: 100%; width: 100%; position:absolute; padding-top: 8vh;background-repeat: no-repeat; background-position-x: center; background-position-y: top; background-image: url('images/big_Logo.png'); background-size: auto;">
+
+
+    <!--Main Navigation-->
+    <header>
+        <!-- Navbar -->
+        <nav id="main-navbar" style="height: auto; background-image: linear-gradient(45deg, #e0bc7e 1%, #a86900 20%);"
+            class="navbar navbar-light fixed-top">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+
+                <!-- Brand -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/logo.png" height="25" alt="" loading="lazy" />
+                </a>
+
+                <!-- Right links -->
+                <ul class="navbar-nav">
+
+                    <!-- Avatar -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" style="color: #000000;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end position-absolute"
+                            aria-labelledby="navbarDropdownMenuLink">
+                            <li><a id="seeRecomended" class="dropdown-item" href="#">See Recommended</a></li>
+                            <li><a id="logoutBtn" class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+    <main id="userMainContainer" class="h-auto w-100">
+        <div class="container-fluid d-none h-100" id="slotsPanel">
+            <div class="row justify-content-center align-items-center py-3"
+                style="background: linear-gradient(150deg, #fdbe00 5%, #a86900);">
+                <div class="col-1">
+                    <button id="backToVenuesBtn" class="btn border-0 bg-transparent" onfocus="this.blur()">
+                        <i class="fa-solid fa-caret-left fa-2xl" style="color: #a86900;"></i>
+                    </button>
+                </div>
+                <div class="col input-group">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"
+                            style="color: #000000;"></i></span>
+                    <input type="text" name="searchSlots" id="searchSlots" class="form-control fw-4">
+                </div>
+                <div class="col">
+                    <select name="vehicleTypeSort" id="vehicleTypeSort" class="form-select">
+                        <option value="">All</option>
+                        <option value="Car">Car</option>
+                        <option value="Bicycle">Bicycle</option>
+                    </select>
+                </div>
+                <div class="justify-content-center align-items-center">
+                    <div class="col text-center">
+                        <h4 id="venueName">TEST</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <table class="table text-white">
+                        <thead>
+                            <tr>
+                                <th scope="col">Slot ID</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Venue</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="slotContainer">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-none m-0 h-100" id="reservedPanel">
+            <div class="row justify-content-center align-items-center bg-warning py-2">
+                <div class="col">
+                    <h3>Parking Slot # <span id="parkingSlotNumber"></span></h3>
+                    <h3>Remaining Time Details</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center mt-4 mx-auto">
+                <div class="col-1 text-white">
+                    <h4>
+                        Car ID:
+                    </h4>
+                </div>
+                <div class="col">
+                    <input class="form-control" type="text" name="carIDField" id="carIDField" readonly>
+                </div>
+            </div>
+            <div
+                class="container-fluid w-100 rounded rounded-5 row justify-content-center align-items-center text-white">
+                <div class="row justify-content-center align-items-center mx-auto mt-5">
+                    <div class="col text-center">
+                        <h5>Remaining Time:</h5>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center mx-auto">
+                    <div class="col text-center">
+                        <h1 id="remainingTime"></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center mx-auto">
+                <div class="col text-center">
+                    <button id="extendBtn" class="btn btn-warning rounded rounded-5 px-4 py-3">
+                        <h2>Extend</h2>
+                    </button>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center mx-auto">
+                <div class="col text-center">
+                    <button id="cancelBtn" class="btn btn-danger rounded rounded-5 px-4 py-3">
+                        <h2>End</h2>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-none m-0 h-100" id="venuesPanel">
+            <div class="row justify-content-center align-items-center pt-3 px-5 pb-3"
+                style="background: linear-gradient(150deg, #fdbe00 5%, #a86900)">
+                <div class="col-5 text-center input-group">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"
+                            style="color: #000000;"></i></span>
+                    <input type="text" name="searchVenues" id="searchVenues" placeholder="Search"
+                        class="form-control rounded rounded-5">
+                </div>
+                <div class="row text-center pt-2 text-white">
+                    <h1>Parking Venues</h1>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col text-start p-0">
+                    <ul class="list-group list-group-flush" id="venueContainer">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-none m-0 h-100" id="reservationPanel">
+            <div class="row justify-content-center align-items-center pt-3 px-5 pb-3"
+                style="background: linear-gradient(150deg, #fdbe00 5%, #a86900)">
+                <div class="col-1">
+                    <button id="backtoSlots" class="btn border-0 bg-transparent" onfocus="this.blur()">
+                        <i class="fa-solid fa-caret-left fa-2xl" style="color: #a86900;"></i>
+                    </button>
+                </div>
+                <div class="col text-center pt-2 text-white">
+                    <h1 id="reservingTitle"></h1>
+                </div>
+            </div>
+            <form>
+                <input type="hidden" id="reservingSlotID">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col">
+                        <div id="mapContainer" style="width: auto;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 py-2 row justify-content-center align-items-center btn-group text-center">
+                    <div class="col text-center">
+                        <input type="radio" class="btn-check" name="reservationType" id="reservingNow" value="now"
+                            autocomplete="off" checked>
+                        <label class="btn btn-outline-warning rounded-5 text-white" for="reservingNow">
+                            <h3>Occupy Now</h3>
+                        </label>
+                    </div>
+                    <div class="col text-center">
+                        <input type="radio" class="btn-check" name="reservationType" id="reservingLater" value="later"
+                            autocomplete="off">
+                        <label class="btn btn-outline-warning rounded-5 text-white" for="reservingLater">
+                            <h3>Reserve Later</h3>
+                        </label>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center py-2 w-100">
+                    <div class="col text-center">
+                        <label for="imageFile" id="imageFileUpload" style="cursor: pointer;"
+                            class="form-label rounded p-5 rounded-5 bg-white">
+                            <i class="fa-solid fa-plus fa-2xl"></i>
+                            Attach a Photo of your car here
+                        </label>
+                        <input type="file" name="imageFile" id="imageFile" class="form-control d-none" required>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center w-100 text-white">
+                    <div class="col-5 text-center mx-auto">
+                        <label for="" class="form-label">
+                            <h4>
+                                Car Number
+                            </h4>
+                            <input type="text" name="reservingCarNumber" id="reservingCarNumber" class="form-control"
+                                required>
+                        </label>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center w-100 py-2 text-white">
+                    <div class="col text-center">
+                        <h4>Choose Number of Hours: </h4>
+                        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                            <input type="radio" class="btn-check" name="reservingTimePeriod" id="reservingTimeA"
+                                value="5" autocomplete="off" checked>
+                            <label class="btn btn-outline-warning text-white" for="reservingTimeA">
+                                <h5>
+                                    1-5 hrs
+                                </h5>
+                            </label>
+
+                            <input type="radio" class="btn-check" name="reservingTimePeriod" id="reservingTimeB"
+                                value="10" autocomplete="off">
+                            <label class="btn btn-outline-warning text-white" for="reservingTimeB">
+                                <h5>
+                                    1-10 hrs
+                                </h5>
+                            </label>
+
+                            <input type="radio" class="btn-check" name="reservingTimePeriod" id="reservingTimeC"
+                                value="15" autocomplete="off">
+                            <label class="btn btn-outline-warning text-white" for="reservingTimeC">
+                                <h5>
+                                    1-15 hrs
+                                </h5>
+                            </label>
+
+                            <input type="radio" class="btn-check" name="reservingTimePeriod" id="reservingTimeD"
+                                value="24" autocomplete="off">
+                            <label class="btn btn-outline-warning text-white" for="reservingTimeD">
+                                <h5>
+                                    24 hrs
+                                </h5>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center w-100 py-2 d-none text-white"
+                    id="reservingDateContainer">
+                    <div class="col-5 text-center">
+                        <label for="reservingDateTime" class="form-label">
+                            <h4>
+                                Date
+                            </h4>
+                        </label>
+                        <input type="datetime-local" name="reservingDateTime" class="form-control"
+                            id="reservingDateTime">
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center w-100 py-2">
+                    <div class="col text-center">
+                        <button class="btn btn-warning">
+                            <h4>Submit Request</h4>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal Body -->
+        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+        <div class="modal fade" id="suggested" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">Suggested Parkings</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container" id="suggestedList">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Slot ID</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Venue</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="suggestedContainer">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!--Main layout-->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+    integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-storage.js"></script>
+<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+<script src="./js/jquery-3.5.1.js"></script>
+<script src="./js/jquery.dataTables.min.js"></script>
+<script src="./js/dataTables.bootstrap5.min.js"></script>
+<script src="./js/script.js"></script>
+<script>
+    let position
+    var storage = firebase.storage();
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition( async (currentPosition) => {
+            position = {
+                lat: currentPosition.coords.latitude * 1000,
+                lng: currentPosition.coords.longitude * 1000,
+            };
+        })
+    }
+    // Try HTML5 geolocation.
+
+    $(document).ready(() => {
+        
+        var storageReference = storage.ref()
+
+        const showAvailableSlots = async function (venueID) {
+            $("#searchSLots, #searchSlots").val("")
+            $("#slotsPanel").toggleClass("d-none")
+            $("#slotContainer").empty()
+            db
+                .collection("parkingslots")
+                .where("venueID", "==", venueID)
+                .get()
+                .then(async function (documents) {
+                    documents.forEach(async function (document) {
+
+                        const data = document.data()
+                        let reserveBtn = await isAvailable(data.reservationList, null, null) ? $("<button>").val(document.id).addClass("btn btn-success").append($("<i>").addClass("fa-solid fa-check").css({ color: "#fff" })) : $("<button>").addClass("btn btn-danger disabled").append($("<i>").addClass("fa-solid fa-xmark").css({ color: "#fff" }))
+
+                        $(reserveBtn).click( function (event) {
+                            $("#slotsPanel, #reservationPanel").toggleClass("d-none")
+                            $("#reservingSlotID").val($(event.currentTarget).val())
+                            // Get Slot Details
+                            db
+                                .collection("parkingslots")
+                                .doc($(event.currentTarget).val())
+                                .get()
+                                .then((reservingSlotDocument) => {
+                                    const reservingSlotData = reservingSlotDocument.data()
+
+                                    // get Venue Details
+                                    db
+                                        .collection("venues")
+                                        .doc(reservingSlotData.venueID)
+                                        .get()
+                                        .then(reservingVenueDocument => {
+                                            const reservingVenueData = reservingVenueDocument.data()
+
+
+                                            $("#reservingTitle").text([reservingVenueData.name, reservingSlotData.slotnumber].join(" - "))
+                                        })
+                                })
+
+                        })
+                        await db
+                            .collection("venues")
+                            .doc(data.venueID)
+                            .get()
+                            .then(async function (venueDocument) {
+                                const venueData = venueDocument.data()
+                                $("#venueName").text(venueData.name)
+                                $("#slotContainer")
+                                    .append(
+                                        $("<tr>")
+                                            .append(
+                                                $("<td>")
+                                                    .text(data.slotnumber),
+                                                $("<td>")
+                                                    .text(data.slotType == "4" ? "Car Only" : "Bicycle Only"),
+                                                $("<td>")
+                                                    .text(data.status),
+                                                $("<td>")
+                                                    .text(venueData.name),
+                                                $("<td>")
+                                                    .append(
+                                                        $(reserveBtn),
+                                                        $("<a>", {"href": "https://www.google.com/maps/search/?api=1&query=" + data.location.lat +"%2C" + data.location.lng +"&zoom=30", "target": "_blank"})
+                                                            .addClass("ms-2 btn btn-info")
+                                                            .append(
+                                                                $("<i>")
+                                                                    .addClass("fa-solid fa-eye")
+                                                            )
+                                                            .click()
+                                                    ),
+                                            )
+                                    )
+                            })
+
+                    })
+                })
+        }
+
+        // Check if Available RN or not based on reservation Dates
+        const isAvailable = async (reservationList, to, from) => {
+            let returnedStatus = true
+            if (reservationList.length < 1)
+                return returnedStatus
+            for (let element of reservationList) {
+                await db
+                    .collection("reservations")
+                    .doc(element)
+                    .get()
+                    .then((document) => {
+                        const documentData = document.data()
+                        // if( documentData.status == "Pending") return
+                        if (to == null) {
+                            const now = new Date().getTime()
+                            if (documentData.from.seconds * 1000 <= now && now <= documentData.to.seconds * 1000) {
+                                returnedStatus = false
+                                return
+                            }
+                        }
+                        else {
+                            if (documentData.from.seconds * 1000 <= to.getTime() < documentData.to.seconds * 1000 || documentData.from.seconds * 1000 <= from.getTime() < documentData.to.seconds * 1000) {
+                                returnedStatus = false
+                                return
+                            }
+                        }
+                    })
+            }
+            return await returnedStatus
+        }
+
+
+        // Show Venues List for Sorting
+        const displayVenues = () => {
+            $("#venuesPanel").removeClass("d-none")
+            $("#venueContainer").empty()
+            db
+                .collection("venues")
+                .orderBy("name", "asc")
+                .get()
+                .then(async (documents) => {
+                    documents.forEach((document) => {
+                        const documentData = document.data()
+                        $("#venueContainer").append(
+                            $("<button>")
+                                .addClass("list-group-item bg-transparent text-start container-fluid")
+                                .append(
+                                    $("<div>")
+                                        .addClass("row justify-content-center align-items-center text-white")
+                                        .append(
+                                            $("<h5>")
+                                                .addClass("col-3")
+                                                .text(documentData.name),
+                                            $("<h5>")
+                                                .addClass("col")
+                                                .text(documentData.address),
+                                            $("<i>")
+                                                .addClass("col-1 fa-solid fa-caret-right fa-2xl")
+                                                .css({
+                                                    color: "#a86900"
+                                                })
+                                        )
+                                )
+                                .val(document.id)
+                                .click((event) => {
+                                    $("#venuesPanel").addClass("d-none")
+                                    $("#backtoSlots").val($(event.currentTarget).val())
+                                    showAvailableSlots($(event.currentTarget).val())
+                                })
+                        )
+                    })
+                })
+        }
+
+        $("#reservationPanel form").on("submit", (event) => {
+            event.preventDefault()
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirm'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    // Date Magic
+
+                    let fromStamp = moment().utcOffset("+60")
+                    if ($("input[name='reservationType']:checked").val() != "now") {
+                        fromStamp = moment($("#reservingDateTime").val())
+                    }
+                    let finalDate = fromStamp.toDate()
+                    let toStamp = fromStamp.add(parseInt($("input[name='reservingTimePeriod']:checked").val()), "h").toDate()
+
+
+                    // Check for overlaps
+
+                    db
+                        .collection("parkingslots")
+                        .doc($("#reservingSlotID").val())
+                        .get()
+                        .then(async (documentReference) => {
+                            const parkingData = await documentReference.data()
+                            if (isAvailable(parkingData.reservationList, toStamp, finalDate)) {
+                                // Add Reservation
+                                db
+                                    .collection("reservations")
+                                    .add({
+                                        duration: $("input[name='reservingTimePeriod']:checked").val(),
+                                        from: finalDate,
+                                        imageName: "carImages/" + $("#imageFile").prop("files")[0].name,
+                                        plateNumber: $("#reservingCarNumber").val(),
+                                        slotID: $("#reservingSlotID").val(),
+                                        status: "Pending",
+                                        to: toStamp,
+                                        userID: sessionStorage.getItem("uid")
+                                    }).then(addedReservation => {
+                                        db
+                                            .collection("users")
+                                            .doc(sessionStorage.getItem("uid"))
+                                            .update({
+                                                userReservationID: addedReservation.id
+                                            })
+
+                                        storage.ref("carImages/" + $("#imageFile").prop("files")[0].name).put($("#imageFile").prop("files")[0])
+                                    
+                                        db
+                                            .collection("parkingslots")
+                                            .doc($("#reservingSlotID").val())
+                                            .get()
+                                            .then((oldDocument) => {
+                                                const oldData = oldDocument.data()
+                                                let newData = oldData.reservationList
+                                                newData.push(addedReservation.id)
+
+                                                db.collection("parkingslots").doc($("#reservingSlotID").val()).update({ reservationList: newData, userID: sessionStorage.getItem("uid") })
+                                            })
+
+                                    })
+                                Swal.fire(
+                                    'Success!',
+                                    'Your request has been sent.',
+                                    'success'
+                                ).then(response => { window.location.reload() })
+                            }
+
+                        })
+                }
+            })
+        })
+
+        db
+            .collection("users")
+            .doc(sessionStorage.getItem("uid"))
+            .get()
+            .then(async (userInformationDocument) => {
+                const userInformation = await userInformationDocument.data()
+                if (userInformation.userReservationID === '') {
+                    $('#suggested').modal('show');
+                    displayVenues()
+                    return
+                }
+                else {
+                    db
+                        .collection("reservations")
+                        .doc(userInformation.userReservationID)
+                        .get()
+                        .then(async (userReservationDocument) => {
+                            const userReservation = await userReservationDocument.data()
+                            if(userReservationDocument.exists){
+                                if (userReservation.status == "Pending") {
+                                    $("#reservedPanel").removeClass("d-none").empty().append(
+                                        $("<div>")
+                                            .addClass("row justify-content-center h-100 my-auto text-white")
+                                            .append(
+                                                $("<div>")
+                                                    .addClass("col text-center h-100")
+                                                    .append(
+                                                        $("<h1>")
+                                                            .text("Reference #: " + userReservationDocument.id),
+                                                        $("<h6>")
+                                                            .text("Please wait while your request is being reviewed")
+                                                    )
+                                            )
+                                    )
+    
+                                } else {
+    
+                                    if (hasActiveReservation(sessionStorage.getItem("uid"))) {
+                                        // If active reservation
+                                        // Show Time 
+                                        $("#reservedPanel").removeClass("d-none")
+                                        $("#parkingSlotNumber").val(userReservation.slotID)
+                                        $("#carIDField").val(userReservation.plateNumber)
+                                        $("#remainingTime").text((moment(userReservation.to.toDate()).utcOffset("+60").subtract({ "hours": moment().utcOffset("+60").hour(), "minute": moment().utcOffset("+60").minutes() })).format("hh:mm"))
+                                        $("#cancelBtn, #extendBtn").val(userReservationDocument.id)
+                                    }
+                                    else {
+                                        
+                                        $('#suggested').modal('show');
+                                        displayVenues()
+                                        return
+                                    }
+                                }
+                            }
+                        })
+
+                }
+            })
+
+        const hasActiveReservation = async userID => {
+            let flag = false
+            db.collection("reservations").where("userID", "==", userID).get()
+                .then(async documentRefs => {
+                    documentRefs.forEach(async documentRef => {
+                        if (flag) return
+                        const documentData = await documentRef.data()
+                        if (documentData.from.seconds * 1000 <= new Date().getTime() && documentData.to.seconds * 1000 <= new Date().getTime())
+                            flag = true
+                    })
+                })
+            return flag
+        }
+
+        $("#logoutBtn").click(async () => {
+            try {
+                await auth.signOut()
+                    .then((exitResponse) => {
+                        sessionStorage.removeItem("uid")
+                        window.location.replace("index.html")
+                    })
+            }
+            catch {
+
+            }
+        })
+        $("#backToVenuesBtn").click(() => {
+            $("#slotsPanel").addClass("d-none")
+            displayVenues()
+        })
+        $("#backtoSlots").click((event) => {
+            $("#reservationPanel").addClass("d-none")
+            showAvailableSlots($(event.currentTarget).val())
+        })
+
+        $("#searchSlots").on("input", function () {
+            var value = $("#searchSlots").val().toLowerCase();
+            var anotherValue = $("#vehicleTypeSort option:selected").val().toLowerCase()
+            $("#slotsPanel table tbody tr").filter(function () {
+                $(this).toggle(
+                    $(this).html().toLowerCase().indexOf(value) > -1 &&
+                    $(this).html().toLowerCase().indexOf(anotherValue) > -1
+                )
+            });
+        });
+
+        $("#vehicleTypeSort").on("change", function () {
+            var value = $("#searchSlots").val().toLowerCase();
+            var anotherValue = $("#vehicleTypeSort option:selected").val().toLowerCase()
+            $("#slotsPanel table tbody tr").filter(function () {
+                $(this).toggle(
+                    $(this).html().toLowerCase().indexOf(value) > -1 &&
+                    $(this).html().toLowerCase().indexOf(anotherValue) > -1
+                )
+            });
+        });
+
+        $("#reservingLater").change((event) => {
+            if ($("#reservingLater").is("checked")) {
+                $("#reservingDateContainer").addClass("d-none")
+            } else {
+                $("#reservingDateContainer").removeClass("d-none").prop("required", true)
+            }
+        })
+
+        $("#reservingNow").change((event) => {
+            if ($("#reservingNow").is("checked")) {
+                $("#reservingDateContainer").removeClass("d-none")
+            } else {
+                $("#reservingDateContainer").addClass("d-none").prop("required", false)
+            }
+        })
+        $("#imageFile").change((self) => {
+            const [file] = $("#imageFile").prop("files")
+            if (file) {
+                $("#imageFileUpload").css({ background: "url('" + URL.createObjectURL(file) + "')", "background-size": "contain" })
+            }
+        })
+        $("#cancelBtn")
+            .click(async event => {
+                Swal.fire({
+                    title: 'Are you sure you want to end your reservation?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then(async (result) => {
+                    const slotRefID = await db.collection("reservations").doc($(event.currentTarget).val()).get().then(async documentRef => { return await documentRef.data().slotID })
+                    db.collection("reservations").doc($(event.currentTarget).val()).update({
+                        status: "ended",
+                        to: moment().utcOffset("+60").toDate()
+                    })
+                    db.collection("users").doc(sessionStorage.getItem("uid")).update({
+                        userReservationID: ""
+                    })
+                    db.collection("parkingslots").doc(slotRefID).update({
+                        status: "vacant",
+                        occupant: ""
+                    })
+                    Swal.fire({
+                        title: 'Reservation has Ended',
+                        icon: 'success'
+                    }).then(response => {
+                        window.location.reload()
+                    })
+                })
+
+            })
+        $("#extendBtn")
+            .click(async event => {
+                Swal.fire({
+                    title: 'Are you sure you want to extend for another 3 hours?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const [duration, toDate, slotRefID] = await db.collection("reservations").doc($(event.currentTarget).val()).get().then(async documentRef => { return await [documentRef.data().duration, documentRef.data().to, documentRef.data().slotID] })
+                        let finalDuration = parseInt(duration) + 3
+                        db.collection("reservations").doc($(event.currentTarget).val()).update({
+                            duration: finalDuration,
+                            to: moment(toDate.toDate()).add({ "hour": 3 }).utcOffset("+60").toDate()
+                        })
+                        Swal.fire({
+                            title: 'Time has been extended',
+                            icon: 'success'
+                        }).then(response => {
+                            window.location.reload()
+                        })
+                    }
+                })
+            })
+        $("#searchVenues").on("input", (event) => {
+            const sample = $("#searchVenues").val().toLowerCase().toString()
+            $("#venueContainer button").filter(function () {
+                $(this).toggle(
+                    $(this).html().toLowerCase().indexOf(sample) > -1
+                )
+            });
+        })
+        const getNearbyParkingSpace = async (lat, lng) => {
+            let near = []
+            await db.collection("parkingslots").get()
+                .then(async parkingslotsReference => {
+                    await parkingslotsReference.forEach(async parkingSlotDocument => {
+                        const parkingData = await parkingSlotDocument.data()
+
+                        if (
+                            (parkingData.location.lng * 1000) - 0.5 <= lng && lng <= (parkingData.location.lng * 1000) + 0.5 &&
+                            (parkingData.location.lat * 1000) - 0.5 <= lat && lat <= (parkingData.location.lat * 1000) + 0.5
+                        ) {
+                            near.push(parkingSlotDocument.id)
+                        }
+                    })
+                })
+            return await near
+        }
+        const loadRecommended = async () => {
+            $("#suggestedContainer").empty()
+            const nearby = await getNearbyParkingSpace(position["lat"], position['lng'])
+            await nearby.forEach(async parkingSlot => {
+                // data-bs-toggle="modal" data-bs-target="#suggested"
+                db.collection("parkingslots").doc(parkingSlot).get()
+                    .then( async documentData => {
+                        const data = await documentData.data()
+                        let reserveBtn = await isAvailable(data.reservationList, null, null) ? $("<button>").val(parkingSlot).addClass("btn btn-success").append($("<i>").addClass("fa-solid fa-check").css({ color: "#fff" })) : $("<button>").addClass("btn btn-danger disabled").append($("<i>").addClass("fa-solid fa-xmark").css({ color: "#fff" }))
+                        
+
+                        $("#backtoSlots").val( data.venueID )
+                        $(reserveBtn).click(async function (event) {
+                            $("main>div").addClass("d-none")
+                            $("#suggested").modal("hide")
+                            $("#reservationPanel").removeClass("d-none")
+                            $("#reservingSlotID").val($(event.currentTarget).val())
+                            // Get Slot Details
+                            db
+                                .collection("parkingslots")
+                                .doc($(event.currentTarget).val())
+                                .get()
+                                .then((reservingSlotDocument) => {
+                                    const reservingSlotData = reservingSlotDocument.data()
+            
+                                    // get Venue Details
+                                    db
+                                        .collection("venues")
+                                        .doc(reservingSlotData.venueID)
+                                        .get()
+                                        .then(reservingVenueDocument => {
+                                            const reservingVenueData = reservingVenueDocument.data()
+            
+            
+                                            $("#reservingTitle").text([reservingVenueData.name, reservingSlotData.slotnumber].join(" - "))
+                                        })
+                                })
+            
+                        })
+                        await db
+                            .collection("venues")
+                            .doc(data.venueID)
+                            .get()
+                            .then(async function (venueDocument) {
+                                const venueData = await venueDocument.data()
+                                $("#venueName").text(venueData.name)
+                                $("#suggestedContainer")
+                                    .append(
+                                        $("<tr>")
+                                            .append(
+                                                $("<td>")
+                                                    .text(data.slotnumber),
+                                                $("<td>")
+                                                    .text(data.slotType == "4" ? "Car Only" : "Bicycle Only"),
+                                                $("<td>")
+                                                    .text(data.status),
+                                                $("<td>")
+                                                    .text(venueData.name),
+                                                $("<td>")
+                                                    .append(
+                                                        $(reserveBtn)
+                                                    ),
+                                            )
+                                    )
+                            })
+    
+                    })
+    
+            })
+        }
+        $("#seeRecomended").click( () => {
+            loadRecommended()
+        })
+
+    })
+</script>
+
+</html>
+<!-- .then( newDocumentReference => {
+                        }) -->

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/loading-indicator.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Premiere Park Park Manager</title>
+</head>
+
+<body>
+    <!-- top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#">Premiere Park</a>
+        </div>
+    </nav>
+    <!-- top navigation bar -->
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-start sidebar-nav bg-dark" tabindex="-1" id="sidebar">
+        <div class="offcanvas-body p-0 navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <a href="parkingManageDashboard.html" class="nav-link px-3 active">
+                        <span class="me-2"><i class="fa-solid fa-house" style="color: #c7c7c7;"></i></span>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parkingManagerSlots.html" class="nav-link px-3">
+                        <span class="me-2"><i class="fa-solid fa-square-parking" style="color: #c7c7c7;"></i></span>
+                        <span>Parking Slots</span>
+                    </a>
+                </li>
+                <li class="my-4">
+                    <hr class="dropdown-divider bg-light" />
+                </li>
+                <li>
+                    <a id="logoutBtn" href="#" class="nav-link px-3">
+                        <span class="me-2">
+                            <span><i class="fa-solid fa-power-off fa-sm" style="color: #c7c7c7"></i>
+                                Logout</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- offcanvas -->
+    <main class="mt-5 pt-3">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col px-5">
+                    <h3>Reservation Requests</h3>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"
+                                style="color: #000000;"></i></span>
+                        <input type="text" name="searchVenues" id="searchVenues" class="form-control fw-4">
+                    </div>
+                </div>
+            </div>
+            <hr class="row my-2 mx-5">
+            <div class="row justify-content-center align-items-center py-3">
+                <div class="col">
+                    <div class="table-responsive-md">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Venue</th>
+                                    <th scope="col">Slot ID</th>
+                                    <th scope="col">Occupant</th>
+                                    <th scope="col">Date From</th>
+                                    <th scope="col">Date To</th>
+                                    <th scope="col">Plate #</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal Body -->
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" id="displayCarPictureModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">Vehicle Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body container">
+                    <img id="vehiclePreview" alt="" class="img-fluid row">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col">
+                            <label for="" class="form-label">Plate Number</label>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" readonly id="vehicleNumber" >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-storage.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/jquery.dataTables.min.js"></script>
+    <script src="./js/dataTables.bootstrap5.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+        $(document).ready( ( ) => {
+            
+            $("#logoutBtn").click( async () => {
+                try{
+                    await auth.signOut()
+                        .then( (exitResponse) => {
+                            sessionStorage.removeItem("uid")
+                            window.location.replace("index.html")
+                        })
+                }
+                catch{
+
+                }
+            })
+
+            const getVenueBySlot = async ( documentID ) => {
+                const venueID = await db.collection("parkingslots").doc( documentID ).get()
+                    .then( async document => {
+                        const slotData = await document.data()
+                        return slotData.venueID
+                    })
+
+                return db.collection("venues").doc( venueID ).get()
+                    .then( async response => {
+                        return await response.data().name 
+                    })
+            }
+
+            const getUserInformationByID = async userID => {
+                return db.collection("users").doc( userID ).get()
+                    .then( async userDocument => {
+                        return await userDocument.data()
+                    })
+            }
+
+            const setPreviewImage = async documentID => {
+                db.collection("reservations").doc( documentID ).get()
+                    .then( documentReference => {
+                        const data = documentReference.data()
+                        const storage = firebase.storage()
+                        storage.ref( data.imageName ).getDownloadURL()
+                            .then( async url =>{
+                                await $("#vehiclePreview").prop("src", url)
+                            })
+                        $("#vehicleNumber").val(data.plateNumber)
+                    })
+            }
+
+            const rejectRequest = requestID => {
+                Swal.fire({
+                    title: 'Are you sure you want to rejec this request?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then( async result => {
+                    if (result.isConfirmed) {
+                        const slotRefID = await db.collection("reservations").doc( requestID ).get().then( async documentRef => { return await documentRef.data().slotID })
+                        db.collection("reservations").doc( requestID ).delete()
+                        Swal.fire({
+                            title: 'Request Has been Rejected.',
+                            icon: 'success'
+                        })
+                    }
+                })
+            }
+
+            const approveRequest = requestID => {
+                Swal.fire({
+                    title: 'Are you sure you want to approve this request?',
+                    text: "You won't be able to revert this!",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm'
+                }).then( async result => {
+                    if (result.isConfirmed) {
+                        const [slotRefID, userID] = await db.collection("reservations").doc( requestID ).get().then( async documentRef => { return await [documentRef.data().slotID, documentRef.data().userID] })
+                        db.collection("reservations").doc( requestID ).update({
+                            status: "Approved",
+                        }).then( ( ) => {
+                            db.collection("parkingslots").doc( slotRefID ).update({
+                                status: "Occupied",
+                                occupant: userID
+                            }).then( ( ) => {
+                                Swal.fire({
+                                    title: 'Request Has been Approved.',
+                                    icon: 'success'
+                                }).then( ( ) => {
+                                    loadTable()
+                                })
+                            })
+                        })
+                    }
+                })
+            }
+
+            const loadTable = async ( ) => {
+                $("tbody").empty()
+                db
+                    .collection("reservations")
+                    .where("status", "==" ,"Pending")
+                    .get()
+                    .then( async (documentRefs) => {
+                        documentRefs.forEach( async  documentRef => {
+                            const documentData = await documentRef.data()
+                            
+                            const venueDisplayName = await getVenueBySlot(documentData.slotID)
+                            const userInformation = await getUserInformationByID( documentData.userID )
+
+                            $("tbody")
+                                .append(
+                                    $("<tr>")
+                                        .append(
+                                            $("<td>")
+                                                .text( venueDisplayName ),
+                                            $("<td>")
+                                                .text( documentData.slotID ),
+                                            $("<td>")
+                                                .text( userInformation.firstname + " " + userInformation.lastname ),
+                                            $("<td>")
+                                                .text( getDisplayTime(documentData.from.toDate()) ),
+                                            $("<td>")
+                                                .text( getDisplayTime(documentData.to.toDate()) ),
+                                            $("<td>")
+                                                .text( documentData.plateNumber ),
+                                            $("<td>")
+                                                .css({ width: "15%" })
+                                                .addClass("container-fluid")
+                                                .append(
+                                                    $("<div>")
+                                                        .addClass("row justify-content-end align-items-center")
+                                                        .append(
+                                                            $("<button>", { "data-bs-toggle": "modal", "data-bs-target" :"#displayCarPictureModal"})
+                                                                .addClass("btn btn-primary col")
+                                                                .append(
+                                                                    $("<i>")
+                                                                        .addClass("fa-solid fa-eye")
+                                                                )
+                                                                .val( documentRef.id )
+                                                                .click( sender => {
+                                                                    setPreviewImage($(sender.currentTarget).val())
+                                                                }),
+                                                            $("<button>")
+                                                                .addClass("btn btn-success col")
+                                                                .val( documentRef.id )
+                                                                .append(
+                                                                    $("<i>")
+                                                                        .addClass("fa-solid fa-check")
+                                                                )
+                                                                .click( sender => {
+                                                                    approveRequest( $(sender.currentTarget).val() )
+                                                                }),
+                                                            $("<button>")
+                                                                .addClass("btn btn-danger col")
+                                                                .val( documentRef.id )
+                                                                .append(
+                                                                    $("<i>")
+                                                                        .addClass("fa-solid fa-xmark")
+                                                                ),
+                                                        )
+                                                )
+                                        )
+                                )
+
+                        });
+                    })
+            }
+
+            const getDisplayTime = timestamp => { return moment(timestamp).utcOffset("+60").format("dddd MMM D hh:mma") }
+
+            loadTable()
+        })
+    </script>
+</body>
+
+</html> 

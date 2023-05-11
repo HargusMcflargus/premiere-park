@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+        />
+        <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <title>Premiere Park Admin</title>
+    </head>
+
+    <body>
+        <!-- top navigation bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebar"
+                    aria-controls="offcanvasExample"
+                >
+                    <span
+                        class="navbar-toggler-icon"
+                        data-bs-target="#sidebar"
+                    ></span>
+                </button>
+                <a
+                    class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold"
+                    href="#"
+                    >Premiere Park</a
+                >
+            </div>
+        </nav>
+        <!-- top navigation bar -->
+        <!-- offcanvas -->
+        <div
+            class="offcanvas offcanvas-start sidebar-nav bg-dark"
+            tabindex="-1"
+            id="sidebar"
+        >
+            <div class="offcanvas-body p-0">
+                <nav class="navbar-dark">
+                    <ul class="navbar-nav">
+                        <li>
+                            <a
+                                href="dashboard.html"
+                                class="nav-link px-3 active"
+                            >
+                                <span class="me-2"><i class="fa-solid fa-house" style="color: #ffffff;"></i></span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="my-4">
+                            <hr class="dropdown-divider bg-light" />
+                        </li>
+                        <li>
+                            <a href="parkingslots.html" class="nav-link px-3">
+                                <span class="me-2">
+									<i class="fa-solid fa-square-parking" style="color: #c7c7c7;"></i>
+								</span>
+                                <span>Parking Slots</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="parkinglotvenue.html"
+                                class="nav-link px-3"
+                            >
+                                <span class="me-2"
+                                    ><i class="bi"
+                                        ><svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            fill="currentColor"
+                                            class="bi bi-pin-map-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"
+                                            /></svg></i
+                                ></span>
+                                <span>Parking Lot Venue</span>
+                            </a>
+                        </li>
+                        <li class="my-4">
+                            <hr class="dropdown-divider bg-light" />
+                        </li>
+                        <li>
+                            <a id="logoutBtn" href="#" class="nav-link px-3">
+                                <span class="me-2">
+                                    <span
+                                        ><i
+                                            class="fa-solid fa-power-off fa-sm"
+                                            style="color: #c7c7c7"
+                                        ></i>
+                                        Logout</span
+                                    >
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- offcanvas -->
+        <main class="mt-5 pt-3">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Dashboard</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white h-100">
+                            <div class="card-body py-5">Total Users <span><h1 id="totalUsers"></h1></span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-dark h-100">
+                            <div class="card-body py-5">Total Slots <span><h1 id="totalSlots"></h1></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <span class="me-2"
+                                    ><i class="bi bi-bar-chart-fill"></i
+                                ></span>
+                                Reservation Traffic
+                            </div>
+                            <div class="card-body">
+                                <canvas
+                                    class="chart"
+                                    width="400"
+                                    height="200"
+                                ></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+            integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+        <script src="./js/jquery-3.5.1.js"></script>
+        <script src="./js/jquery.dataTables.min.js"></script>
+        <script src="./js/dataTables.bootstrap5.min.js"></script>
+        <script src="./js/script.js"></script>
+        <script src="js/dashboard.js"></script>
+    </body>
+</html>
